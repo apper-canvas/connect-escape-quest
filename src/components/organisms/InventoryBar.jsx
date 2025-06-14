@@ -47,9 +47,13 @@ const handleDrop = async (e, targetItemId) => {
       
       try {
         await onCombineItems(draggedItem, targetItemId);
-        toast.success('Items combined successfully!');
+        // Success toast is handled by the parent component (GameRoom)
+        // which has access to the detailed combination result messages
       } catch (error) {
-        toast.error(error.message || 'These items cannot be combined.');
+        // Error toast is also handled by parent, but we can show a fallback
+        if (!error.message?.includes('inventory') && !error.message?.includes('combine')) {
+          toast.error('Failed to combine items. Please try again.');
+        }
       } finally {
         setIsProcessing(false);
       }

@@ -96,29 +96,27 @@ const GameRoom = () => {
     }
   };
 
-  const handleCombineItems = async (item1Id, item2Id) => {
+const handleCombineItems = async (item1Id, item2Id) => {
     try {
-      // Find objects that can be combined
-      const item1 = room.objects.find(obj => obj.id === item1Id);
-      const item2 = room.objects.find(obj => obj.id === item2Id);
+      // Use gameService which validates through gameLogic service
+      const updatedGameState = await gameService.combineItems(item1Id, item2Id);
+      setGameState(updatedGameState);
       
-      if (item1?.combinesWith.includes(item2Id) || item2?.combinesWith.includes(item1Id)) {
-        await gameService.combineItems(item1Id, item2Id);
-        const updatedGameState = await gameService.getGameState();
-        setGameState(updatedGameState);
+      // Show combination result message if available
+      if (updatedGameState.lastCombinationResult?.message) {
+        toast.success(updatedGameState.lastCombinationResult.message);
         
-        toast.success('Items combined successfully!');
-        
-        // Check if combination reveals a puzzle
-        const combinedObject = item1.combinesWith.includes(item2Id) ? item1 : item2;
-        if (combinedObject.revealsClue) {
-          toast.info(combinedObject.revealsClue);
+        // Show additional info about unlocked clues
+        if (updatedGameState.lastCombinationResult.unlockedClues?.length > 0) {
+          toast.info(`New clues unlocked: ${updatedGameState.lastCombinationResult.unlockedClues.length}`);
         }
       } else {
-        toast.warning('These items cannot be combined');
+        toast.success('Items combined successfully!');
       }
+      
     } catch (err) {
-      toast.error('Failed to combine items');
+      // gameService.combineItems throws descriptive error messages from gameLogic validation
+      toast.error(err.message || 'These items cannot be combined.');
     }
   };
 
