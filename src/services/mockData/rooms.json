@@ -1,0 +1,295 @@
+[
+  {
+    "id": "abandoned-mansion",
+    "name": "Abandoned Mansion",
+    "theme": "Victorian Gothic",
+    "description": "A once-grand mansion now shrouded in mystery. The dusty halls hold secrets waiting to be uncovered.",
+    "difficulty": "Medium",
+    "estimatedTime": "25-35 minutes",
+    "isCompleted": false,
+    "bestTime": null,
+    "isLocked": false,
+    "backgroundImage": "mansion-bg",
+    "objects": [
+      {
+        "id": "old-painting",
+        "name": "Old Painting",
+        "description": "A portrait of the mansion's former owner. The eyes seem to follow you...",
+        "position": { "x": 15, "y": 30 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "The painting's frame has numbers etched along the edge: 1847",
+        "combinesWith": [],
+        "category": "decoration"
+      },
+      {
+        "id": "antique-key",
+        "name": "Brass Key",
+        "description": "An ornate brass key with intricate engravings. It looks important.",
+        "position": { "x": 70, "y": 45 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "This key opens the desk drawer",
+        "combinesWith": ["locked-drawer"],
+        "category": "key"
+      },
+      {
+        "id": "locked-drawer",
+        "name": "Mahogany Desk",
+        "description": "An elegant mahogany desk with a locked drawer. You need a key to open it.",
+        "position": { "x": 45, "y": 60 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "Inside the drawer is a cryptic note and a silver locket",
+        "combinesWith": ["antique-key"],
+        "category": "furniture"
+      },
+      {
+        "id": "crystal-ball",
+        "name": "Crystal Ball",
+        "description": "A mysterious crystal ball that seems to glow with inner light.",
+        "position": { "x": 25, "y": 75 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "The crystal shows visions of hidden passages",
+        "combinesWith": [],
+        "category": "mystical"
+      },
+      {
+        "id": "grandfather-clock",
+        "name": "Grandfather Clock",
+        "description": "An imposing grandfather clock that stopped at 11:47. The pendulum is still.",
+        "position": { "x": 85, "y": 20 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "The clock face hides a secret compartment behind the 12",
+        "combinesWith": [],
+        "category": "furniture"
+      }
+    ],
+    "puzzles": [
+      {
+        "id": "mansion-code-lock",
+        "type": "code",
+        "title": "Library Safe",
+        "description": "Enter the 4-digit code to unlock the safe",
+        "solution": "1847",
+        "hints": [
+          "Look around the room for numbers that might be significant",
+          "The old painting holds more secrets than just a face",
+          "Check the frame of the portrait - numbers are etched there: 1847"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["old-painting"],
+        "rewardText": "You found the mansion's deed and a map of secret passages!"
+      },
+      {
+        "id": "locket-pattern",
+        "type": "pattern",
+        "title": "Silver Locket",
+        "description": "Arrange the symbols to match the pattern shown in the locket",
+        "solution": ["moon", "star", "sun", "key"],
+        "hints": [
+          "The locket contains four symbols in a specific order",
+          "Look at the engravings inside the locket carefully",
+          "The correct order is: Moon, Star, Sun, Key"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["antique-key", "locked-drawer"],
+        "rewardText": "The locket opens to reveal a hidden message about the mansion's treasure!"
+      }
+    ]
+  },
+  {
+    "id": "secret-lab",
+    "name": "Secret Laboratory",
+    "theme": "Sci-Fi Research Facility",
+    "description": "A high-tech laboratory hidden beneath the city. Something went wrong here...",
+    "difficulty": "Hard",
+    "estimatedTime": "35-45 minutes",
+    "isCompleted": false,
+    "bestTime": null,
+    "isLocked": true,
+    "backgroundImage": "lab-bg",
+    "objects": [
+      {
+        "id": "test-tube",
+        "name": "Glowing Test Tube",
+        "description": "A test tube filled with a mysterious glowing substance.",
+        "position": { "x": 30, "y": 40 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "The substance reacts to certain electromagnetic frequencies",
+        "combinesWith": ["frequency-generator"],
+        "category": "chemical"
+      },
+      {
+        "id": "computer-terminal",
+        "name": "Computer Terminal",
+        "description": "A high-tech computer terminal with multiple screens and blinking lights.",
+        "position": { "x": 60, "y": 30 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "Access logs show experiments conducted at specific times",
+        "combinesWith": [],
+        "category": "technology"
+      },
+      {
+        "id": "frequency-generator",
+        "name": "Frequency Generator",
+        "description": "A device that generates electromagnetic frequencies. Currently inactive.",
+        "position": { "x": 80, "y": 50 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "When activated with the right substance, it opens sealed doors",
+        "combinesWith": ["test-tube"],
+        "category": "technology"
+      },
+      {
+        "id": "lab-notes",
+        "name": "Research Notes",
+        "description": "Scattered research notes with complex formulas and diagrams.",
+        "position": { "x": 20, "y": 70 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "The notes mention a sequence: 7394 - the emergency override code",
+        "combinesWith": [],
+        "category": "document"
+      }
+    ],
+    "puzzles": [
+      {
+        "id": "lab-override",
+        "type": "code",
+        "title": "Emergency Override",
+        "description": "Enter the emergency override code to unlock the lab exit",
+        "solution": "7394",
+        "hints": [
+          "Check the research notes for important numbers",
+          "The scientists would have had an emergency protocol",
+          "The research notes mention an emergency override: 7394"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["lab-notes"],
+        "rewardText": "Emergency systems activated! The exit is now unlocked."
+      },
+      {
+        "id": "frequency-puzzle",
+        "type": "sequence",
+        "title": "Frequency Calibration",
+        "description": "Match the frequency pattern to activate the generator",
+        "solution": [440, 523, 659, 784],
+        "hints": [
+          "The frequency pattern is based on musical notes",
+          "Look for clues about sound waves in the lab equipment",
+          "The sequence follows A4, C5, E5, G5 frequencies: 440, 523, 659, 784 Hz"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["test-tube", "frequency-generator"],
+        "rewardText": "The frequency generator activates, opening the sealed chamber!"
+      }
+    ]
+  },
+  {
+    "id": "pirate-ship",
+    "name": "Pirate Ship",
+    "theme": "Caribbean Adventure",
+    "description": "Captain Blackbeard's legendary ship. The treasure is close, but the ship holds many secrets.",
+    "difficulty": "Easy",
+    "estimatedTime": "15-25 minutes",
+    "isCompleted": false,
+    "bestTime": null,
+    "isLocked": true,
+    "backgroundImage": "ship-bg",
+    "objects": [
+      {
+        "id": "treasure-map",
+        "name": "Treasure Map",
+        "description": "A weathered map showing the location of Blackbeard's treasure.",
+        "position": { "x": 40, "y": 25 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "X marks the spot, but you need the captain's compass to read it properly",
+        "combinesWith": ["compass"],
+        "category": "document"
+      },
+      {
+        "id": "compass",
+        "name": "Captain's Compass",
+        "description": "A golden compass that belonged to the ship's captain.",
+        "position": { "x": 75, "y": 60 },
+        "isCollectible": true,
+        "isExamined": false,
+        "revealsClue": "The compass points to true magnetic north and reveals hidden markings on maps",
+        "combinesWith": ["treasure-map"],
+        "category": "navigation"
+      },
+      {
+        "id": "cannon",
+        "name": "Ship's Cannon",
+        "description": "A massive cannon aimed at the horizon. Something is stuck in the barrel.",
+        "position": { "x": 90, "y": 40 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "There's a message in a bottle lodged in the cannon barrel",
+        "combinesWith": [],
+        "category": "weapon"
+      },
+      {
+        "id": "ship-wheel",
+        "name": "Ship's Wheel",
+        "description": "The captain's wheel with intricate rope work and brass fittings.",
+        "position": { "x": 50, "y": 15 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "The wheel can be turned to reveal hidden compartments",
+        "combinesWith": [],
+        "category": "navigation"
+      },
+      {
+        "id": "rum-barrel",
+        "name": "Rum Barrel",
+        "description": "A large barrel that once held the finest Caribbean rum.",
+        "position": { "x": 15, "y": 80 },
+        "isCollectible": false,
+        "isExamined": false,
+        "revealsClue": "The barrel is hollow and contains a hidden key",
+        "combinesWith": [],
+        "category": "container"
+      }
+    ],
+    "puzzles": [
+      {
+        "id": "treasure-coordinates",
+        "type": "coordinates",
+        "title": "Treasure Location",
+        "description": "Use the map and compass to find the treasure coordinates",
+        "solution": { "x": 12, "y": 34 },
+        "hints": [
+          "Combine the treasure map with the captain's compass",
+          "Look for coordinate markings that become visible",
+          "The compass reveals the coordinates: X=12, Y=34"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["treasure-map", "compass"],
+        "rewardText": "You've found the treasure location! The chest is yours!"
+      },
+      {
+        "id": "captains-riddle",
+        "type": "riddle",
+        "title": "Captain's Riddle",
+        "description": "Solve the riddle hidden in the message bottle",
+        "solution": "anchor",
+        "riddle": "I keep the ship from drifting away, heavy and strong both night and day. What am I?",
+        "hints": [
+          "Think about what keeps a ship in place",
+          "It's heavy and prevents the ship from moving",
+          "The answer is: anchor"
+        ],
+        "isSolved": false,
+        "requiredObjects": ["cannon"],
+        "rewardText": "The anchor compartment opens, revealing the captain's personal treasure!"
+      }
+    ]
+  }
+]

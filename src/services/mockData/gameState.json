@@ -1,0 +1,11 @@
+{
+  "currentRoom": null,
+  "inventory": [],
+  "solvedPuzzles": [],
+  "examinedObjects": [],
+  "collectedObjects": [],
+  "hintsUsed": 0,
+  "playTime": 0,
+  "gameStartTime": null,
+  "currentHintCooldown": 0
+}

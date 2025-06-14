@@ -1,0 +1,28 @@
+{
+  "totalRoomsCompleted": 0,
+  "totalPlayTime": 0,
+  "totalHintsUsed": 0,
+  "achievements": [],
+  "roomStats": {
+    "abandoned-mansion": {
+      "completed": false,
+      "bestTime": null,
+      "attempts": 0,
+      "hintsUsed": 0
+    },
+    "secret-lab": {
+      "completed": false,
+      "bestTime": null,
+      "attempts": 0,
+      "hintsUsed": 0
+    },
+    "pirate-ship": {
+      "completed": false,
+      "bestTime": null,
+      "attempts": 0,
+      "hintsUsed": 0
+    }
+  },
+  "currentStreak": 0,
+  "longestStreak": 0
+}
