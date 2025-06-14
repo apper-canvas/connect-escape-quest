@@ -1,4 +1,5 @@
 import gameStateData from '../mockData/gameState.json';
+import gameLogic from '../gameLogic.js';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -75,14 +76,47 @@ class GameService {
     return { ...this.gameState };
   }
 
-  async combineItems(item1Id, item2Id) {
+async combineItems(item1Id, item2Id) {
     await delay(200);
-    // Logic for item combination would go here
-    // For now, just remove both items from inventory
-    this.gameState.inventory = this.gameState.inventory.filter(
-      id => id !== item1Id && id !== item2Id
-    );
-    return { ...this.gameState };
+    
+    // Validate combination using game logic
+    const validation = gameLogic.validateCombination(item1Id, item2Id, this.gameState);
+    
+    if (!validation.valid) {
+      throw new Error(validation.message);
+    }
+
+    // Get combination result
+    const combinationResult = gameLogic.getCombinationResult(item1Id, item2Id);
+    
+    if (combinationResult.success) {
+      // Remove consumed items from inventory
+      this.gameState.inventory = this.gameState.inventory.filter(
+        id => !combinationResult.consumedItems.includes(id)
+      );
+      
+      // Add result item if specified
+      if (combinationResult.resultItem) {
+        this.gameState.inventory.push(combinationResult.resultItem);
+        this.gameState.collectedObjects.push(combinationResult.resultItem);
+      }
+      
+      // Add unlocked clues
+      if (combinationResult.unlockedClues) {
+        combinationResult.unlockedClues.forEach(clue => {
+          if (!this.gameState.unlockedClues.includes(clue)) {
+            this.gameState.unlockedClues.push(clue);
+          }
+        });
+      }
+      
+      return { 
+        ...this.gameState,
+        lastCombinationResult: combinationResult
+      };
+    } else {
+      throw new Error(combinationResult.message);
+    }
   }
 
   async resetGame() {

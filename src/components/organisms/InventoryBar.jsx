@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ApperIcon from '@/components/ApperIcon';
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
 
 const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => {
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverItem, setDragOverItem] = useState(null);
-
+  const [isProcessing, setIsProcessing] = useState(false);
   const getInventoryObjects = () => {
     return inventory.map(itemId => 
       roomObjects.find(obj => obj.id === itemId)
@@ -38,11 +39,20 @@ const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => 
     setDragOverItem(null);
   };
 
-  const handleDrop = (e, targetItemId) => {
+const handleDrop = async (e, targetItemId) => {
     e.preventDefault();
     
     if (draggedItem && targetItemId && draggedItem !== targetItemId) {
-      onCombineItems(draggedItem, targetItemId);
+      setIsProcessing(true);
+      
+      try {
+        await onCombineItems(draggedItem, targetItemId);
+        toast.success('Items combined successfully!');
+      } catch (error) {
+        toast.error(error.message || 'These items cannot be combined.');
+      } finally {
+        setIsProcessing(false);
+      }
     }
     
     setDraggedItem(null);
@@ -88,7 +98,7 @@ const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => 
                   onDragOver={(e) => handleDragOver(e, object.id)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, object.id)}
-                  className={`
+className={`
                     group relative w-12 h-12 rounded-lg border-2 cursor-move
                     flex items-center justify-center transition-all duration-200
                     ${dragOverItem === object.id 
@@ -96,6 +106,7 @@ const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => 
                       : 'border-accent/50 bg-accent/10 hover:border-accent hover:bg-accent/20'
                     }
                     ${draggedItem === object.id ? 'opacity-50 scale-95' : ''}
+                    ${isProcessing ? 'pointer-events-none opacity-75' : ''}
                   `}
                 >
                   <ApperIcon 
@@ -112,14 +123,25 @@ const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => 
                     {object.name}
                   </motion.div>
 
-                  {/* Combine Indicator */}
+{/* Combine Indicator */}
                   {draggedItem && draggedItem !== object.id && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full flex items-center justify-center"
+                      className={`absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center ${
+                        isProcessing ? 'bg-gray-500' : 'bg-warning'
+                      }`}
                     >
-                      <ApperIcon name="Plus" className="w-2 h-2 text-background" />
+                      {isProcessing ? (
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
+                          <ApperIcon name="Loader2" className="w-2 h-2 text-background" />
+                        </motion.div>
+                      ) : (
+                        <ApperIcon name="Plus" className="w-2 h-2 text-background" />
+                      )}
                     </motion.div>
                   )}
                 </motion.div>
@@ -129,13 +151,32 @@ const InventoryBar = ({ inventory, roomObjects, onCombineItems, onUseItem }) => 
         </div>
 
         {/* Instructions */}
-        {inventoryObjects.length > 1 && (
+{/* Instructions */}
+        {inventoryObjects.length > 1 && !isProcessing && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="text-white/50 text-xs ml-4 hidden md:block"
           >
             Drag items together to combine
+          </motion.div>
+        )}
+        
+        {/* Processing Indicator */}
+        {isProcessing && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-accent text-xs ml-4 flex items-center"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="mr-2"
+            >
+              <ApperIcon name="Loader2" className="w-3 h-3" />
+</motion.div>
+            Combining items...
           </motion.div>
         )}
       </div>
