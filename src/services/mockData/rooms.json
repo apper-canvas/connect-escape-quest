@@ -11,7 +11,7 @@
     "isLocked": false,
     "backgroundImage": "mansion-bg",
     "objects": [
-      {
+{
         "id": "old-painting",
         "name": "Old Painting",
         "description": "A portrait of the mansion's former owner. The eyes seem to follow you...",
@@ -20,9 +20,11 @@
         "isExamined": false,
         "revealsClue": "The painting's frame has numbers etched along the edge: 1847",
         "combinesWith": [],
-        "category": "decoration"
+        "category": "decoration",
+        "imageUrl": "/assets/objects/mansion/old-painting.jpg",
+        "modelPath": "/assets/models/mansion/painting.gltf"
       },
-      {
+{
         "id": "antique-key",
         "name": "Brass Key",
         "description": "An ornate brass key with intricate engravings. It looks important.",
@@ -31,9 +33,11 @@
         "isExamined": false,
         "revealsClue": "This key opens the desk drawer",
         "combinesWith": ["locked-drawer"],
-        "category": "key"
+        "category": "key",
+        "imageUrl": "/assets/objects/mansion/brass-key.jpg",
+        "modelPath": "/assets/models/mansion/key.gltf"
       },
-      {
+{
         "id": "locked-drawer",
         "name": "Mahogany Desk",
         "description": "An elegant mahogany desk with a locked drawer. You need a key to open it.",
@@ -42,9 +46,11 @@
         "isExamined": false,
         "revealsClue": "Inside the drawer is a cryptic note and a silver locket",
         "combinesWith": ["antique-key"],
-        "category": "furniture"
+        "category": "furniture",
+        "imageUrl": "/assets/objects/mansion/mahogany-desk.jpg",
+        "modelPath": "/assets/models/mansion/desk.gltf"
       },
-      {
+{
         "id": "crystal-ball",
         "name": "Crystal Ball",
         "description": "A mysterious crystal ball that seems to glow with inner light.",
@@ -53,9 +59,11 @@
         "isExamined": false,
         "revealsClue": "The crystal shows visions of hidden passages",
         "combinesWith": [],
-        "category": "mystical"
+        "category": "mystical",
+        "imageUrl": "/assets/objects/mansion/crystal-ball.jpg",
+        "modelPath": "/assets/models/mansion/crystal-ball.gltf"
       },
-      {
+{
         "id": "grandfather-clock",
         "name": "Grandfather Clock",
         "description": "An imposing grandfather clock that stopped at 11:47. The pendulum is still.",
@@ -64,7 +72,9 @@
         "isExamined": false,
         "revealsClue": "The clock face hides a secret compartment behind the 12",
         "combinesWith": [],
-        "category": "furniture"
+        "category": "furniture",
+        "imageUrl": "/assets/objects/mansion/grandfather-clock.jpg",
+        "modelPath": "/assets/models/mansion/clock.gltf"
       }
     ],
     "puzzles": [
@@ -112,7 +122,7 @@
     "isLocked": true,
     "backgroundImage": "lab-bg",
     "objects": [
-      {
+{
         "id": "test-tube",
         "name": "Glowing Test Tube",
         "description": "A test tube filled with a mysterious glowing substance.",
@@ -121,9 +131,11 @@
         "isExamined": false,
         "revealsClue": "The substance reacts to certain electromagnetic frequencies",
         "combinesWith": ["frequency-generator"],
-        "category": "chemical"
+        "category": "chemical",
+        "imageUrl": "/assets/objects/lab/test-tube.jpg",
+        "modelPath": "/assets/models/lab/test-tube.gltf"
       },
-      {
+{
         "id": "computer-terminal",
         "name": "Computer Terminal",
         "description": "A high-tech computer terminal with multiple screens and blinking lights.",
@@ -132,9 +144,11 @@
         "isExamined": false,
         "revealsClue": "Access logs show experiments conducted at specific times",
         "combinesWith": [],
-        "category": "technology"
+        "category": "technology",
+        "imageUrl": "/assets/objects/lab/computer-terminal.jpg",
+        "modelPath": "/assets/models/lab/terminal.gltf"
       },
-      {
+{
         "id": "frequency-generator",
         "name": "Frequency Generator",
         "description": "A device that generates electromagnetic frequencies. Currently inactive.",
@@ -143,9 +157,11 @@
         "isExamined": false,
         "revealsClue": "When activated with the right substance, it opens sealed doors",
         "combinesWith": ["test-tube"],
-        "category": "technology"
+        "category": "technology",
+        "imageUrl": "/assets/objects/lab/frequency-generator.jpg",
+        "modelPath": "/assets/models/lab/generator.gltf"
       },
-      {
+{
         "id": "lab-notes",
         "name": "Research Notes",
         "description": "Scattered research notes with complex formulas and diagrams.",
@@ -154,7 +170,9 @@
         "isExamined": false,
         "revealsClue": "The notes mention a sequence: 7394 - the emergency override code",
         "combinesWith": [],
-        "category": "document"
+        "category": "document",
+        "imageUrl": "/assets/objects/lab/research-notes.jpg",
+        "modelPath": "/assets/models/lab/notes.gltf"
       }
     ],
     "puzzles": [
@@ -202,7 +220,7 @@
     "isLocked": true,
     "backgroundImage": "ship-bg",
     "objects": [
-      {
+{
         "id": "treasure-map",
         "name": "Treasure Map",
         "description": "A weathered map showing the location of Blackbeard's treasure.",
@@ -211,9 +229,11 @@
         "isExamined": false,
         "revealsClue": "X marks the spot, but you need the captain's compass to read it properly",
         "combinesWith": ["compass"],
-        "category": "document"
+        "category": "document",
+        "imageUrl": "/assets/objects/ship/treasure-map.jpg",
+        "modelPath": "/assets/models/ship/map.gltf"
       },
-      {
+{
         "id": "compass",
         "name": "Captain's Compass",
         "description": "A golden compass that belonged to the ship's captain.",
@@ -222,9 +242,11 @@
         "isExamined": false,
         "revealsClue": "The compass points to true magnetic north and reveals hidden markings on maps",
         "combinesWith": ["treasure-map"],
-        "category": "navigation"
+        "category": "navigation",
+        "imageUrl": "/assets/objects/ship/compass.jpg",
+        "modelPath": "/assets/models/ship/compass.gltf"
       },
-      {
+{
         "id": "cannon",
         "name": "Ship's Cannon",
         "description": "A massive cannon aimed at the horizon. Something is stuck in the barrel.",
@@ -233,9 +255,11 @@
         "isExamined": false,
         "revealsClue": "There's a message in a bottle lodged in the cannon barrel",
         "combinesWith": [],
-        "category": "weapon"
+        "category": "weapon",
+        "imageUrl": "/assets/objects/ship/cannon.jpg",
+        "modelPath": "/assets/models/ship/cannon.gltf"
       },
-      {
+{
         "id": "ship-wheel",
         "name": "Ship's Wheel",
         "description": "The captain's wheel with intricate rope work and brass fittings.",
@@ -244,9 +268,11 @@
         "isExamined": false,
         "revealsClue": "The wheel can be turned to reveal hidden compartments",
         "combinesWith": [],
-        "category": "navigation"
+        "category": "navigation",
+        "imageUrl": "/assets/objects/ship/ship-wheel.jpg",
+        "modelPath": "/assets/models/ship/wheel.gltf"
       },
-      {
+{
         "id": "rum-barrel",
         "name": "Rum Barrel",
         "description": "A large barrel that once held the finest Caribbean rum.",
@@ -255,7 +281,9 @@
         "isExamined": false,
         "revealsClue": "The barrel is hollow and contains a hidden key",
         "combinesWith": [],
-        "category": "container"
+        "category": "container",
+        "imageUrl": "/assets/objects/ship/rum-barrel.jpg",
+        "modelPath": "/assets/models/ship/barrel.gltf"
       }
     ],
     "puzzles": [

@@ -1,6 +1,64 @@
 import { motion } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { Suspense, useState } from 'react';
+import { useLoader } from '@react-three/fiber';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { TextureLoader } from 'three';
 import ApperIcon from '@/components/ApperIcon';
 
+// 3D Object Component
+const Object3D = ({ object, onClick, isExamined }) => {
+  const [loadError, setLoadError] = useState(false);
+  
+  try {
+    if (object.modelPath && !loadError) {
+      const gltf = useLoader(GLTFLoader, object.modelPath);
+      return (
+        <primitive 
+          object={gltf.scene} 
+          scale={0.5}
+          onClick={onClick}
+          onPointerOver={(e) => e.stopPropagation()}
+        />
+      );
+    }
+  } catch (error) {
+    setLoadError(true);
+  }
+  
+  return null;
+};
+
+// 2D Image Object Component
+const Object2D = ({ object, onClick, isExamined }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
+  if (object.imageUrl && !imageError) {
+    return (
+      <div className="relative w-20 h-20 cursor-pointer" onClick={onClick}>
+        <img
+          src={object.imageUrl}
+          alt={object.name}
+          className={`w-full h-full object-cover rounded-lg border-2 transition-all duration-200 ${
+            isExamined ? 'border-accent shadow-accent/50' : 'border-accent/50'
+          }`}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageError(true)}
+          style={{
+            filter: isExamined ? 'brightness(1.2) saturate(1.1)' : 'brightness(1)',
+            boxShadow: isExamined ? '0 0 20px rgba(212, 175, 55, 0.4)' : '0 0 10px rgba(212, 175, 55, 0.2)'
+          }}
+        />
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-surface/50 rounded-lg animate-pulse" />
+        )}
+      </div>
+    );
+  }
+  
+  return null;
+};
 const RoomScene = ({ room, gameState, onObjectClick, onPuzzleClick }) => {
   if (!room) return null;
 
@@ -50,7 +108,7 @@ const RoomScene = ({ room, gameState, onObjectClick, onPuzzleClick }) => {
         </p>
       </motion.div>
 
-      {/* Interactive Objects */}
+{/* Interactive Objects */}
       <div className="absolute inset-0 z-10">
         {room.objects.map((object, index) => {
           const isCollected = gameState?.collectedObjects?.includes(object.id);
@@ -74,7 +132,7 @@ const RoomScene = ({ room, gameState, onObjectClick, onPuzzleClick }) => {
             >
               {/* Object Glow */}
               <motion.div
-                className="absolute inset-0 rounded-full animate-glow"
+                className="absolute inset-0 rounded-lg animate-glow"
                 animate={{
                   boxShadow: [
                     '0 0 20px rgba(212, 175, 55, 0.3)',
@@ -85,28 +143,60 @@ const RoomScene = ({ room, gameState, onObjectClick, onPuzzleClick }) => {
                 transition={{ duration: 2, repeat: Infinity }}
               />
               
-              {/* Object Icon */}
+              {/* Object Rendering */}
               <motion.div
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                className={`
-                  relative w-12 h-12 rounded-full flex items-center justify-center
-                  border-2 border-accent bg-accent/20 backdrop-blur-sm
-                  ${isExamined ? 'bg-accent/40' : 'bg-accent/20'}
-                  transition-all duration-200
-                `}
+                whileHover={{ scale: 1.1, rotate: 2 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative"
               >
-                <ApperIcon 
-                  name={getObjectIcon(object.category)} 
-                  className="w-6 h-6 text-accent" 
-                />
+                {/* Try 3D Model First */}
+                {object.modelPath && (
+                  <div className="w-24 h-24">
+                    <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                      <ambientLight intensity={0.6} />
+                      <pointLight position={[10, 10, 10]} intensity={0.8} />
+                      <pointLight position={[-10, -10, -10]} intensity={0.3} />
+                      <Suspense fallback={null}>
+                        <Object3D 
+                          object={object} 
+                          onClick={() => onObjectClick(object.id)}
+                          isExamined={isExamined}
+                        />
+                      </Suspense>
+                    </Canvas>
+                  </div>
+                )}
+                
+                {/* Fallback to 2D Image */}
+                {!object.modelPath && object.imageUrl && (
+                  <Object2D 
+                    object={object} 
+                    onClick={() => onObjectClick(object.id)}
+                    isExamined={isExamined}
+                  />
+                )}
+                
+                {/* Final Fallback to Icon */}
+                {!object.modelPath && !object.imageUrl && (
+                  <div className={`
+                    relative w-12 h-12 rounded-full flex items-center justify-center
+                    border-2 border-accent bg-accent/20 backdrop-blur-sm
+                    ${isExamined ? 'bg-accent/40' : 'bg-accent/20'}
+                    transition-all duration-200
+                  `}>
+                    <ApperIcon 
+                      name={getObjectIcon(object.category)} 
+                      className="w-6 h-6 text-accent" 
+                    />
+                  </div>
+                )}
               </motion.div>
               
               {/* Object Label */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileHover={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-surface/90 backdrop-blur-sm rounded text-xs text-white whitespace-nowrap border border-accent/30"
+                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-surface/90 backdrop-blur-sm rounded text-xs text-white whitespace-nowrap border border-accent/30 z-10"
               >
                 {object.name}
                 {isExamined && (
