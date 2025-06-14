@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+"preview": "vite preview"
   },
-"dependencies": {
+  "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "framer-motion": "^10.16.4",
@@ -21,7 +21,7 @@
     "date-fns": "^4.1.0",
     "react-redux": "^9.2.0",
     "@reduxjs/toolkit": "2.7.0",
-    "three": "^0.158.0",
+    "three": "^0.159.0",
     "@react-three/fiber": "^8.15.11",
     "@react-three/drei": "^9.88.17"
   },
