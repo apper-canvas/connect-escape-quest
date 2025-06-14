@@ -75,7 +75,6 @@ class GameService {
     }
     return { ...this.gameState };
   }
-
 async combineItems(item1Id, item2Id) {
     await delay(200);
     
@@ -83,7 +82,10 @@ async combineItems(item1Id, item2Id) {
     const validation = gameLogic.validateCombination(item1Id, item2Id, this.gameState);
     
     if (!validation.valid) {
-      throw new Error(validation.message);
+      // Provide contextual hint for failed combinations
+      const hint = gameLogic.getContextualHint(item1Id, item2Id);
+      const errorMessage = `${validation.message} ${hint}`;
+      throw new Error(errorMessage);
     }
 
     // Get combination result
@@ -119,6 +121,58 @@ async combineItems(item1Id, item2Id) {
     }
   }
 
+  async combineWithRoomObject(inventoryItemId, roomObjectId, roomObjects) {
+    await delay(200);
+    
+    // Validate combination using game logic
+    const validation = gameLogic.validateRoomObjectCombination(
+      inventoryItemId, 
+      roomObjectId, 
+      this.gameState, 
+      roomObjects
+    );
+    
+    if (!validation.valid) {
+      throw new Error(validation.message);
+    }
+
+    // Get combination result
+    const combinationResult = gameLogic.getCombinationResult(inventoryItemId, roomObjectId);
+    
+    if (combinationResult.success) {
+      // Remove consumed inventory item
+      this.gameState.inventory = this.gameState.inventory.filter(
+        id => id !== inventoryItemId
+      );
+      
+      // Add result item if specified
+      if (combinationResult.resultItem) {
+        this.gameState.inventory.push(combinationResult.resultItem);
+        this.gameState.collectedObjects.push(combinationResult.resultItem);
+      }
+      
+      // Add unlocked clues
+      if (combinationResult.unlockedClues) {
+        combinationResult.unlockedClues.forEach(clue => {
+          if (!this.gameState.unlockedClues.includes(clue)) {
+            this.gameState.unlockedClues.push(clue);
+          }
+        });
+      }
+      
+      // Mark room object as modified/used
+      if (!this.gameState.examinedObjects.includes(roomObjectId)) {
+        this.gameState.examinedObjects.push(roomObjectId);
+      }
+      
+      return { 
+        ...this.gameState,
+        lastCombinationResult: combinationResult
+      };
+    } else {
+      throw new Error(combinationResult.message);
+    }
+  }
   async resetGame() {
     await delay(200);
     this.gameState = { ...gameStateData };

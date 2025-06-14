@@ -99,8 +99,7 @@ class GameLogicService {
       consumedItems: []
     };
   }
-
-  // Get all possible combinations for an item
+// Get all possible combinations for an item
   getPossibleCombinations(itemId) {
     const combinations = [];
     
@@ -116,6 +115,72 @@ class GameLogicService {
     });
     
     return combinations;
+  }
+
+  // Get combination hints for better user guidance
+  getCombinationHints(itemId) {
+    const hints = [];
+    const possibleCombinations = this.getPossibleCombinations(itemId);
+    
+    possibleCombinations.forEach(combo => {
+      hints.push({
+        targetItem: combo.requiredItem,
+        hint: `Try combining with ${combo.requiredItem.replace('-', ' ')}`
+      });
+    });
+    
+    return hints;
+  }
+
+  // Check if an inventory item can combine with a room object
+  canCombineWithRoomObject(inventoryItemId, roomObjectId) {
+    // Check both directions for combinations
+    const combinationKey1 = `${inventoryItemId},${roomObjectId}`;
+    const combinationKey2 = `${roomObjectId},${inventoryItemId}`;
+    
+    return this.combinations[combinationKey1] || this.combinations[combinationKey2] || null;
+  }
+
+  // Validate if inventory item can combine with room object
+  validateRoomObjectCombination(inventoryItemId, roomObjectId, gameState, roomObjects) {
+    // Check if inventory item exists in player's inventory
+    if (!gameState.inventory.includes(inventoryItemId)) {
+      return {
+        valid: false,
+        message: 'This item is not in your inventory.'
+      };
+    }
+
+    // Check if room object exists and is accessible
+    const roomObject = roomObjects.find(obj => obj.id === roomObjectId);
+    if (!roomObject) {
+      return {
+        valid: false,
+        message: 'Room object not found.'
+      };
+    }
+
+    // Check if room object has been examined (requirement for combination)
+    if (!gameState.examinedObjects.includes(roomObjectId)) {
+      return {
+        valid: false,
+        message: 'You need to examine this object first before attempting to combine items with it.'
+      };
+    }
+
+    // Check combination rules
+    const combination = this.canCombineWithRoomObject(inventoryItemId, roomObjectId);
+    if (!combination) {
+      return {
+        valid: false,
+        message: `The ${inventoryItemId.replace('-', ' ')} cannot be used with the ${roomObject.name.toLowerCase()}.`
+      };
+    }
+
+    return {
+      valid: true,
+      combination
+    };
   }
 
   // Validate if combination is logically possible
@@ -141,7 +206,7 @@ class GameLogicService {
     if (!combination) {
       return {
         valid: false,
-        message: 'These items cannot be combined together.'
+        message: 'These items cannot be combined together. Try examining objects in the room for clues about what items work together.'
       };
     }
 
@@ -149,6 +214,22 @@ class GameLogicService {
       valid: true,
       combination
     };
+  }
+
+  // Get contextual hints for failed combinations
+  getContextualHint(item1Id, item2Id) {
+    const item1Hints = this.getCombinationHints(item1Id);
+    const item2Hints = this.getCombinationHints(item2Id);
+    
+    if (item1Hints.length > 0) {
+      return `${item1Id.replace('-', ' ')} can be combined with: ${item1Hints.map(h => h.targetItem.replace('-', ' ')).join(', ')}`;
+    }
+    
+    if (item2Hints.length > 0) {
+      return `${item2Id.replace('-', ' ')} can be combined with: ${item2Hints.map(h => h.targetItem.replace('-', ' ')).join(', ')}`;
+    }
+    
+    return 'Look around the room for objects that might work with your inventory items.';
   }
 }
 
